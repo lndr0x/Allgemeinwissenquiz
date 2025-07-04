@@ -81,20 +81,26 @@ function checkAntwort() {
   if (!userAntwort) {
     feedbackDiv.textContent = 'Bitte gib eine Antwort ein!';
     feedbackDiv.style.color = '#ffb300';
+    feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
     return;
   }
   if (userAntwort === richtigeAntwort) {
     feedbackDiv.innerHTML = '✅ <span style="color:#00e6d0">Richtig!</span>';
     feedbackDiv.style.color = '#00e6d0';
+    feedbackDiv.classList.remove('animate-wrong');
+    feedbackDiv.classList.add('animate-correct');
     score++;
   } else {
     feedbackDiv.innerHTML = `❌ <span style="color:#ff4c60">Falsch.</span> Die richtige Antwort war: <b>${fragenPool[aktuelleFrage].antwort}</b>`;
     feedbackDiv.style.color = '#ff4c60';
+    feedbackDiv.classList.remove('animate-correct');
+    feedbackDiv.classList.add('animate-wrong');
   }
   aktuelleFrage++;
   submitBtn.disabled = true;
   answerInput.disabled = true;
   setTimeout(() => {
+    feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
     submitBtn.disabled = false;
     answerInput.disabled = false;
     showFrage();
