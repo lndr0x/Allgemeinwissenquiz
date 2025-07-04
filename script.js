@@ -82,6 +82,7 @@ function checkAntwort() {
     feedbackDiv.textContent = 'Bitte gib eine Antwort ein!';
     feedbackDiv.style.color = '#ffb300';
     feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
+    answerInput.classList.remove('glow-correct', 'glow-wrong');
     return;
   }
   if (userAntwort === richtigeAntwort) {
@@ -89,22 +90,27 @@ function checkAntwort() {
     feedbackDiv.style.color = '#00e6d0';
     feedbackDiv.classList.remove('animate-wrong');
     feedbackDiv.classList.add('animate-correct');
+    answerInput.classList.remove('glow-wrong');
+    answerInput.classList.add('glow-correct');
     score++;
   } else {
     feedbackDiv.innerHTML = `❌ <span style="color:#ff4c60">Falsch.</span> Die richtige Antwort war: <b>${fragenPool[aktuelleFrage].antwort}</b>`;
     feedbackDiv.style.color = '#ff4c60';
     feedbackDiv.classList.remove('animate-correct');
     feedbackDiv.classList.add('animate-wrong');
+    answerInput.classList.remove('glow-correct');
+    answerInput.classList.add('glow-wrong');
   }
   aktuelleFrage++;
   submitBtn.disabled = true;
   answerInput.disabled = true;
   setTimeout(() => {
     feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
+    answerInput.classList.remove('glow-correct', 'glow-wrong');
     submitBtn.disabled = false;
     answerInput.disabled = false;
     showFrage();
-  }, 1700);
+  }, 2700);
 }
 
 function auswertung() {
