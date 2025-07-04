@@ -126,6 +126,25 @@ function auswertung() {
   resultDiv.innerHTML = `<div>Du hast <b>${score}</b> von <b>${FRAGEN_ANZAHL}</b> Fragen richtig.<br><br>${feedback}<br><br><button id="restart">Nochmal spielen</button></div>`;
   resultDiv.classList.remove('hidden');
   document.getElementById('restart').onclick = startQuiz;
+  konfettiRegen();
+}
+
+function konfettiRegen() {
+  const farben = ['#00e6d0', '#8f00ff', '#007cf0', '#ff4c60', '#ffb300', '#00ffb0', '#fff'];
+  const konfettiAnzahl = 36;
+  for (let i = 0; i < konfettiAnzahl; i++) {
+    const konfetti = document.createElement('div');
+    konfetti.className = 'confetti';
+    konfetti.style.left = Math.random() * 98 + 'vw';
+    konfetti.style.background = farben[Math.floor(Math.random() * farben.length)];
+    konfetti.style.transform = `rotate(${Math.random()*360}deg)`;
+    konfetti.style.width = 12 + Math.random()*10 + 'px';
+    konfetti.style.height = 12 + Math.random()*10 + 'px';
+    konfetti.style.opacity = 0.7 + Math.random()*0.3;
+    konfetti.style.animationDelay = (Math.random()*0.7) + 's';
+    document.body.appendChild(konfetti);
+    setTimeout(() => konfetti.remove(), 2500);
+  }
 }
 
 submitBtn.onclick = checkAntwort;
