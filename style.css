@@ -254,11 +254,10 @@ footer {
 }
 
 .mikaator-link {
-  color: #a259ff;
+  color: #7c2ae8;
   text-shadow:
-    0 0 16px #a259ff,
-    0 0 32px #d580ff,
-    0 0 8px #a259ff,
+    0 0 6px #7c2ae8,
+    0 0 12px #a259ff,
     0 0 2px #fff;
   font-weight: bold;
   transition: text-shadow 0.2s, color 0.2s;
@@ -266,9 +265,8 @@ footer {
 .mikaator-link:hover {
   color: #fff;
   text-shadow:
-    0 0 32px #a259ff,
-    0 0 48px #d580ff,
-    0 0 16px #a259ff,
-    0 0 8px #fff;
+    0 0 12px #7c2ae8,
+    0 0 18px #a259ff,
+    0 0 4px #fff;
   text-decoration: underline;
 } 
