@@ -255,12 +255,20 @@ footer {
 
 .mikaator-link {
   color: #a259ff;
-  text-shadow: 0 0 8px #a259ff, 0 0 2px #fff;
+  text-shadow:
+    0 0 16px #a259ff,
+    0 0 32px #d580ff,
+    0 0 8px #a259ff,
+    0 0 2px #fff;
   font-weight: bold;
   transition: text-shadow 0.2s, color 0.2s;
 }
 .mikaator-link:hover {
   color: #fff;
-  text-shadow: 0 0 16px #a259ff, 0 0 8px #fff;
+  text-shadow:
+    0 0 32px #a259ff,
+    0 0 48px #d580ff,
+    0 0 16px #a259ff,
+    0 0 8px #fff;
   text-decoration: underline;
 } 
