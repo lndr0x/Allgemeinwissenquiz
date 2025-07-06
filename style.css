@@ -251,4 +251,16 @@ footer {
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   80% { opacity: 1; }
   100% { transform: translateY(110vh) rotate(360deg); opacity: 0.7; }
+}
+
+.mikaator-link {
+  color: #a259ff;
+  text-shadow: 0 0 8px #a259ff, 0 0 2px #fff;
+  font-weight: bold;
+  transition: text-shadow 0.2s, color 0.2s;
+}
+.mikaator-link:hover {
+  color: #fff;
+  text-shadow: 0 0 16px #a259ff, 0 0 8px #fff;
+  text-decoration: underline;
 } 
