@@ -1,4 +1,5 @@
 const fragen = [
+  // Alte Fragen
   { frage: "Wer wurde 2021 Bundeskanzler von Deutschland?", antwort: "olaf scholz" },
   { frage: "Wie heißt der KI-Chatbot von OpenAI, der 2022 weltweit bekannt wurde?", antwort: "chatgpt" },
   { frage: "Welches weltweite Ereignis prägte das Jahr 2020 besonders?", antwort: "corona-pandemie" },
@@ -18,9 +19,51 @@ const fragen = [
   { frage: "Wie heißt die Popikone von 'Break My Soul'?", antwort: "beyoncé" },
   { frage: "Wie heißt das bekannteste Videoportal weltweit?", antwort: "youtube" },
   { frage: "Wie viele Kontinente gibt es auf der Erde?", antwort: "7" },
-  { frage: "Welches Land gilt 2025 als das glücklichste der Welt?", antwort: "finnland" }
-];
+  { frage: "Welches Land gilt 2025 als das glücklichste der Welt?", antwort: "finnland" },
 
+  // Neue Fragen 2025
+  { frage: "Welche Partei gewann bei der Bundestagswahl 2025?", antwort: "cdu/csu" },
+  { frage: "Wer ist seit 2025 Bundeskanzler von Deutschland?", antwort: "friedrich merz" },
+  { frage: "Welche Partei erreichte bei der Bundestagswahl 2025 erstmals über 20 Prozent?", antwort: "afd" },
+  { frage: "Welches Land übernahm 2025 die EU-Ratspräsidentschaft?", antwort: "polen" },
+  { frage: "Welche beiden Länder traten 2025 dem Schengen-Raum bei?", antwort: "rumänien und bulgarien" },
+  { frage: "Wie hoch ist der Mindestlohn in Deutschland seit Januar 2025?", antwort: "12,82 euro" },
+  { frage: "Wie viel kostet das Deutschlandticket seit 2025?", antwort: "58 euro" },
+  { frage: "Wie heißt die neue Patientenakte, die 2025 eingeführt wurde?", antwort: "epa" },
+  { frage: "Welche Füllungen dürfen Zahnärzte seit 2025 nicht mehr verwenden?", antwort: "amalgam" },
+  { frage: "Wie viele Euro kostet das Briefporto seit 2025?", antwort: "0,95 euro" },
+  { frage: "Welche Technologie ist laut Gartner der wichtigste Trend 2025?", antwort: "agentic ai" },
+  { frage: "Welche Smartphone-Funktion wird 2025 Standard?", antwort: "usb-c" },
+  { frage: "Wie heißt das Jahr 2025 laut UN-Generalversammlung?", antwort: "internationales jahr der quantenwissenschaft" },
+  { frage: "Welche Art von Computing wird 2025 wichtiger?", antwort: "quantum computing" },
+  { frage: "Welche Realitätstechnologie wird 2025 mainstream?", antwort: "virtual reality" },
+  { frage: "Wo findet 2025 die Handball-WM der Männer statt?", antwort: "kroatien dänemark norwegen" },
+  { frage: "Welches Land gewann den Eurovision Song Contest 2025?", antwort: "österreich" },
+  { frage: "Wo findet das Champions League Finale 2025 statt?", antwort: "münchen" },
+  { frage: "Welche Fußball-EM findet 2025 statt?", antwort: "frauen-em" },
+  { frage: "Wo findet die Frauen-EM 2025 statt?", antwort: "schweiz" },
+  { frage: "Welche deutsche Künstlerin ist für den Preis für Popkultur 2025 nominiert?", antwort: "shirin david" },
+  { frage: "Welche Band ist für den Preis für Popkultur 2025 nominiert?", antwort: "deichkind" },
+  { frage: "Wann findet das Pop-Kultur Festival 2025 statt?", antwort: "august" },
+  { frage: "Welcher Rapper tritt beim Super Bowl 2025 auf?", antwort: "kendrick lamar" },
+  { frage: "Welche Art von Pillen kommen 2025 gegen Übergewicht?", antwort: "orforfilpron" },
+  { frage: "Welche Technologie hilft Gelähmten 2025?", antwort: "brain-computer-interface" },
+  { frage: "Welches Wissenschaftsjahr ist 2025?", antwort: "zukunftsenergie" },
+  { frage: "Welche Medizin-Schnittstelle wird 2025 wichtig?", antwort: "hirn-computer-schnittstelle" },
+  { frage: "Welcher Preis steigt 2025 von 45 auf 55 Euro?", antwort: "co2-preis" },
+  { frage: "Welche Umweltmaßnahme wird 2025 verstärkt?", antwort: "klimaschutz" },
+  { frage: "Welche Energieform wird 2025 wichtiger?", antwort: "solarenergie" },
+  { frage: "Welcher Tag wird 2025 als Klimatag gefeiert?", antwort: "22. april" },
+  { frage: "Wer ist seit Januar 2025 US-Präsident?", antwort: "donald trump" },
+  { frage: "Welche Stadt war 2025 Kulturhauptstadt Europas?", antwort: "chemnitz" },
+  { frage: "Welches Land führte 2025 die gleichgeschlechtliche Ehe ein?", antwort: "thailand" },
+  { frage: "Welche Waffenruhe trat 2025 in Kraft?", antwort: "hamas israel" },
+  { frage: "Welche digitale Rechnung wird 2025 Pflicht?", antwort: "e-rechnung" },
+  { frage: "Welche Grenze steigt für Kleinunternehmer 2025?", antwort: "100000 euro" },
+  { frage: "Welche Patientenakte wird 2025 Standard?", antwort: "elektronische patientenakte" },
+  { frage: "Welche Fotos müssen 2025 digital vorliegen?", antwort: "passbilder" },
+  { frage: "Welche Steuer wird 2025 reformiert?", antwort: "grundsteuer" }
+];
 
 const FRAGEN_ANZAHL = 15;
 let fragenPool = [];
@@ -145,4 +188,4 @@ answerInput.addEventListener('keydown', function(e) {
   }
 });
 
-window.onload = startQuiz; 
+window.onload = startQuiz;
