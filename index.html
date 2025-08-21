@@ -9,13 +9,46 @@
 <body>
   <div class="quiz-container">
     <h1>WISSENSCHECK 2020–2025 <span class="emoji">🧠</span></h1>
-    <div id="quiz">
+    
+    <!-- Quiz Setup Screen -->
+    <div id="setupScreen">
+      <div class="setup-content">
+        <p>Teste dein Wissen über aktuelle Ereignisse von 2020 bis 2025!</p>
+        <div class="setup-options">
+          <div class="option-group">
+            <label for="questionCount">Anzahl Fragen:</label>
+            <select id="questionCount">
+              <option value="5">5 Fragen (Schnell)</option>
+              <option value="10">10 Fragen (Mittel)</option>
+              <option value="15" selected>15 Fragen (Standard)</option>
+              <option value="20">20 Fragen (Lang)</option>
+            </select>
+          </div>
+          <div class="option-group">
+            <label>
+              <input type="checkbox" id="hintsEnabled" checked>
+              Hinweise aktivieren 💡
+            </label>
+          </div>
+        </div>
+        <button id="startQuiz" class="start-button">🚀 Quiz starten</button>
+      </div>
+    </div>
+    
+    <!-- Main Quiz -->
+    <div id="quiz" class="hidden">
       <div id="progress"></div>
       <div id="question"></div>
+      <div id="hintContainer" class="hidden">
+        <button id="hintButton" class="hint-button">💡 Tipp anzeigen</button>
+        <div id="hintText" class="hidden"></div>
+      </div>
       <input type="text" id="answer" placeholder="Deine Antwort..." autocomplete="off" />
       <button id="submit">Antwort prüfen</button>
       <div id="feedback"></div>
     </div>
+    
+    <!-- Results -->
     <div id="result" class="hidden"></div>
   </div>
   <footer>
@@ -23,4 +56,4 @@
   </footer>
   <script src="script.js"></script>
 </body>
-</html> 
+</html>
