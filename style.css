@@ -19,6 +19,16 @@ body {
   100% {background-position: 0% 50%;}
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Container mit dunklem, leicht transparentem Hintergrund und abgerundeten Ecken */
 .quiz-container {
   max-width: 600px;
@@ -31,6 +41,137 @@ body {
     inset 0 0 30px rgba(255, 255, 255, 0.05);
   padding: 48px 40px 40px 40px;
   animation: fadeIn 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* Utility class for hidden elements */
+.hidden {
+  display: none;
+}
+
+/* Setup Screen Styles */
+#setupScreen {
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+.setup-content {
+  background: rgba(30, 35, 45, 0.8);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 20px;
+}
+
+.setup-content p {
+  font-size: 1.2rem;
+  color: #d7e3fc;
+  margin-bottom: 25px;
+}
+
+.setup-options {
+  margin-bottom: 30px;
+}
+
+.option-group {
+  margin: 20px 0;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option-group label {
+  color: #a3cef1;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.option-group select {
+  background: #1a2238;
+  color: #e0e6f0;
+  border: 2px solid #4fd1c5;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.option-group select:focus {
+  border-color: #00e6d0;
+  box-shadow: 0 0 8px rgba(79, 209, 197, 0.4);
+}
+
+.option-group input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 300px;
+  padding: 18px 0;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(90deg, #00e6d0 0%, #4fd1c5 100%);
+  color: #f0f8ff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 230, 208, 0.5);
+  transition: all 0.3s ease;
+  letter-spacing: 1.2px;
+}
+
+.start-button:hover, .start-button:focus {
+  background: linear-gradient(90deg, #4fd1c5 0%, #00e6d0 100%);
+  transform: scale(1.05);
+  box-shadow: 0 8px 28px rgba(0, 230, 208, 0.7);
+}
+
+/* Hint System Styles */
+#hintContainer {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.hint-button {
+  background: linear-gradient(90deg, #ffb300 0%, #ffa500 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 179, 0, 0.4);
+}
+
+.hint-button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #ffa500 0%, #ff8c00 100%);
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(255, 179, 0, 0.6);
+}
+
+.hint-button:disabled {
+  background: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+#hintText {
+  background: rgba(255, 179, 0, 0.1);
+  border: 1px solid rgba(255, 179, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+  color: #ffb300;
+  font-style: italic;
+  animation: fadeIn 0.5s ease;
 }
 
 /* Überschrift modern und klar */
@@ -178,7 +319,7 @@ h1 {
 }
 
 /* Restart-Button mit Farbverlauf und Hover */
-#restart {
+#restart, #review, #backToResult, #restartFromReview {
   margin-top: 28px;
   padding: 20px 44px;
   font-size: 1.4rem;
@@ -198,12 +339,127 @@ h1 {
   z-index: 2;
 }
 
-#restart:hover, #restart:focus {
+#review {
+  background: linear-gradient(90deg, #007cf0 0%, #4fd1c5 100%);
+  font-size: 1.2rem;
+  padding: 15px 35px;
+}
+
+#backToResult, #restartFromReview {
+  font-size: 1.1rem;
+  padding: 12px 25px;
+  margin-top: 15px;
+}
+
+#restart:hover, #restart:focus,
+#review:hover, #review:focus,
+#backToResult:hover, #backToResult:focus,
+#restartFromReview:hover, #restartFromReview:focus {
   background: linear-gradient(90deg, #8f00ff 0%, #4fd1c5 100%);
   transform: scale(1.07);
   box-shadow:
     0 8px 36px #8f00ffdd,
     0 0 18px #4fd1c5dd;
+}
+
+/* Continue Button */
+.continue-button {
+  width: 100%;
+  max-width: 520px;
+  padding: 15px 0;
+  margin-top: 20px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(90deg, #00e6d0 0%, #007cf0 100%);
+  color: #f0f8ff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 230, 208, 0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.continue-button:hover, .continue-button:focus {
+  background: linear-gradient(90deg, #007cf0 0%, #00e6d0 100%);
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 230, 208, 0.6);
+}
+
+/* Review Screen Styles */
+#reviewDiv {
+  background: rgba(20, 25, 35, 0.95);
+  border-radius: 28px;
+  padding: 40px;
+  margin-top: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.review-item {
+  background: rgba(30, 35, 45, 0.8);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid #4fd1c5;
+}
+
+.review-question {
+  color: #d7e3fc;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.review-answers {
+  font-size: 1rem;
+}
+
+.user-answer {
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.user-answer.correct {
+  background: rgba(79, 209, 197, 0.2);
+  color: #4fd1c5;
+  border: 1px solid rgba(79, 209, 197, 0.3);
+}
+
+.user-answer.incorrect {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.correct-answer {
+  background: rgba(0, 230, 208, 0.15);
+  color: #00e6d0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 230, 208, 0.2);
+  font-weight: 500;
+}
+
+/* Confetti Animation */
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  top: -10px;
+  z-index: 1000;
+  animation: confettiFall 2.5s linear forwards;
+  pointer-events: none;
 }
 
 /* Animationen für Glows und Feedback */
@@ -262,8 +518,80 @@ h1 {
   #result {
     font-size: 1.3rem;
   }
-  #restart {
+  #restart, #review {
     font-size: 1.2rem;
     padding: 16px 36px;
+    margin: 10px 5px;
+  }
+  
+  .continue-button {
+    font-size: 1.1rem;
+    padding: 12px 0;
+  }
+  
+  #reviewDiv {
+    padding: 25px 15px;
+    margin-top: 15px;
+  }
+  
+  .review-item {
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+  
+  .review-question {
+    font-size: 1rem;
+  }
+  
+  .review-answers {
+    font-size: 0.9rem;
+  }
+  
+  #backToResult, #restartFromReview {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 8px 5px;
+    display: inline-block;
+  }
+  
+  /* Setup screen mobile styles */
+  .setup-content {
+    padding: 20px;
+  }
+  
+  .setup-content p {
+    font-size: 1.1rem;
+  }
+  
+  .option-group {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .option-group label {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+  
+  .option-group select {
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+  
+  .start-button {
+    font-size: 1.2rem;
+    padding: 15px 0;
+  }
+  
+  /* Hint system mobile styles */
+  .hint-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  
+  #hintText {
+    font-size: 0.9rem;
+    padding: 12px;
   }
 }
