@@ -86,14 +86,22 @@ function shuffle(array) {
   return array;
 }
 
+let userAnswers = []; // Track user answers for review
+
 function startQuiz() {
   fragenPool = shuffle([...fragen]).slice(0, FRAGEN_ANZAHL);
   aktuelleFrage = 0;
   score = 0;
+  userAnswers = []; // Reset user answers
   resultDiv.classList.add('hidden');
   quizDiv.classList.remove('hidden');
   answerInput.value = '';
   feedbackDiv.textContent = '';
+  // Remove any continue button that might exist
+  const continueBtn = document.getElementById('continue');
+  if (continueBtn) continueBtn.remove();
+  const reviewDiv = document.getElementById('reviewDiv');
+  if (reviewDiv) reviewDiv.remove();
   showFrage();
 }
 
@@ -109,9 +117,18 @@ function showFrage() {
   feedbackDiv.textContent = '';
 }
 
+function normalizeAnswer(answer) {
+  return answer.trim().toLowerCase()
+    .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+    .replace(/[^\w\s-]/g, '') // Remove punctuation except hyphens
+    .replace(/\s+/g, ' '); // Normalize whitespace
+}
+
 function checkAntwort() {
-  const userAntwort = answerInput.value.trim().toLowerCase();
-  const richtigeAntwort = fragenPool[aktuelleFrage].antwort.toLowerCase();
+  const userAntwort = normalizeAnswer(answerInput.value);
+  const richtigeAntwort = normalizeAnswer(fragenPool[aktuelleFrage].antwort);
+  const originalUserInput = answerInput.value.trim();
+  
   if (!userAntwort) {
     feedbackDiv.textContent = 'Bitte gib eine Antwort ein!';
     feedbackDiv.style.color = '#ffb300';
@@ -119,8 +136,33 @@ function checkAntwort() {
     answerInput.classList.remove('glow-correct', 'glow-wrong');
     return;
   }
-  if (userAntwort === richtigeAntwort) {
-    feedbackDiv.innerHTML = '✅ <span style="color:#00e6d0">Richtig!</span>';
+  
+  // Check for exact match first
+  let isCorrect = userAntwort === richtigeAntwort;
+  
+  // If not exact, try some common variations
+  if (!isCorrect) {
+    const variations = [
+      richtigeAntwort.replace(/\s+/g, ''), // Remove spaces
+      richtigeAntwort.replace(/-/g, ' '), // Replace hyphens with spaces
+      richtigeAntwort.replace(/\s+/g, '-'), // Replace spaces with hyphens
+      richtigeAntwort.split(' ')[0], // First word only
+      richtigeAntwort.split(' ').slice(-1)[0], // Last word only
+    ];
+    
+    isCorrect = variations.some(variation => userAntwort === variation || userAntwort.includes(variation) || variation.includes(userAntwort));
+  }
+  
+  // Store the answer for review
+  userAnswers.push({
+    question: fragenPool[aktuelleFrage].frage,
+    userAnswer: originalUserInput,
+    correctAnswer: fragenPool[aktuelleFrage].antwort,
+    isCorrect: isCorrect
+  });
+  
+  if (isCorrect) {
+    feedbackDiv.innerHTML = '✅ <span style="color:#00e6d0">Richtig! Gut gemacht!</span>';
     feedbackDiv.style.color = '#00e6d0';
     feedbackDiv.classList.remove('animate-wrong');
     feedbackDiv.classList.add('animate-correct');
@@ -128,39 +170,129 @@ function checkAntwort() {
     answerInput.classList.add('glow-correct');
     score++;
   } else {
-    feedbackDiv.innerHTML = `❌ <span style="color:#ff4c60">Falsch.</span> Die richtige Antwort war: <b>${fragenPool[aktuelleFrage].antwort}</b>`;
+    feedbackDiv.innerHTML = `❌ <span style="color:#ff4c60">Das war leider nicht richtig.</span> Die richtige Antwort war: <b>${fragenPool[aktuelleFrage].antwort}</b>`;
     feedbackDiv.style.color = '#ff4c60';
     feedbackDiv.classList.remove('animate-correct');
     feedbackDiv.classList.add('animate-wrong');
     answerInput.classList.remove('glow-correct');
     answerInput.classList.add('glow-wrong');
   }
+  
   aktuelleFrage++;
   submitBtn.disabled = true;
   answerInput.disabled = true;
+  
+  // Add continue button for user control
   setTimeout(() => {
-    feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
-    answerInput.classList.remove('glow-correct', 'glow-wrong');
-    submitBtn.disabled = false;
-    answerInput.disabled = false;
-    showFrage();
-  }, 2700);
+    showContinueButton();
+  }, 1000);
+}
+
+function showContinueButton() {
+  const continueBtn = document.createElement('button');
+  continueBtn.id = 'continue';
+  continueBtn.textContent = 'Weiter →';
+  continueBtn.className = 'continue-button';
+  continueBtn.onclick = continueToNext;
+  
+  // Insert after feedback
+  feedbackDiv.parentNode.insertBefore(continueBtn, feedbackDiv.nextSibling);
+  continueBtn.focus(); // Focus for accessibility
+}
+
+function continueToNext() {
+  const continueBtn = document.getElementById('continue');
+  if (continueBtn) {
+    continueBtn.remove();
+  }
+  
+  feedbackDiv.classList.remove('animate-correct', 'animate-wrong');
+  answerInput.classList.remove('glow-correct', 'glow-wrong');
+  submitBtn.disabled = false;
+  answerInput.disabled = false;
+  showFrage();
 }
 
 function auswertung() {
   quizDiv.classList.add('hidden');
   let feedback = '';
+  const percentage = Math.round((score / FRAGEN_ANZAHL) * 100);
+  
   if (score >= 12) {
-    feedback = 'Stark! Du bist ein Wissensprofi.';
-  } else if (score >= 7) {
-    feedback = 'Solide Leistung. Da geht noch was!';
+    feedback = '🏆 Ausgezeichnet! Du bist ein echter Wissensprofi!';
+  } else if (score >= 9) {
+    feedback = '⭐ Sehr gut! Du kennst dich richtig gut aus!';
+  } else if (score >= 6) {
+    feedback = '👍 Gute Leistung! Du bist auf einem guten Weg!';
+  } else if (score >= 3) {
+    feedback = '📚 Nicht schlecht! Mit etwas mehr Übung wird\'s noch besser!';
   } else {
-    feedback = 'Uff... Du brauchst dringend Nachhilfe.';
+    feedback = '💪 Jeder fängt mal klein an! Versuch\'s gerne nochmal!';
   }
-  resultDiv.innerHTML = `<div>Du hast <b>${score}</b> von <b>${FRAGEN_ANZAHL}</b> Fragen richtig.<br><br>${feedback}<br><br><button id="restart">Nochmal spielen</button></div>`;
+  
+  resultDiv.innerHTML = `
+    <div>
+      <div style="font-size: 2rem; margin-bottom: 20px;">🧠</div>
+      <div>Du hast <b>${score}</b> von <b>${FRAGEN_ANZAHL}</b> Fragen richtig beantwortet!</div>
+      <div style="font-size: 1.2rem; margin: 10px 0; color: #4fd1c5;">Das sind ${percentage}%</div>
+      <div style="margin: 20px 0;">${feedback}</div>
+      <div style="margin-top: 30px;">
+        <button id="restart">🔄 Nochmal versuchen</button>
+        <button id="review" style="margin-left: 15px;">📋 Antworten ansehen</button>
+      </div>
+    </div>`;
   resultDiv.classList.remove('hidden');
   document.getElementById('restart').onclick = startQuiz;
+  document.getElementById('review').onclick = showReview;
   konfettiRegen();
+}
+
+function showReview() {
+  resultDiv.classList.add('hidden');
+  
+  const reviewDiv = document.createElement('div');
+  reviewDiv.id = 'reviewDiv';
+  reviewDiv.innerHTML = `
+    <div style="text-align: center; margin-bottom: 30px;">
+      <h2 style="color: #a3cef1; margin-bottom: 10px;">📋 Antworten im Überblick</h2>
+      <div style="color: #4fd1c5;">Richtig: ${score} | Falsch: ${FRAGEN_ANZAHL - score}</div>
+    </div>
+    <div id="reviewList"></div>
+    <div style="text-align: center; margin-top: 30px;">
+      <button id="backToResult">← Zurück zum Ergebnis</button>
+      <button id="restartFromReview" style="margin-left: 15px;">🔄 Neues Quiz starten</button>
+    </div>
+  `;
+  
+  document.querySelector('.quiz-container').appendChild(reviewDiv);
+  
+  const reviewList = document.getElementById('reviewList');
+  userAnswers.forEach((item, index) => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'review-item';
+    itemDiv.innerHTML = `
+      <div class="review-question">
+        <strong>${index + 1}. ${item.question}</strong>
+      </div>
+      <div class="review-answers">
+        <div class="user-answer ${item.isCorrect ? 'correct' : 'incorrect'}">
+          ${item.isCorrect ? '✅' : '❌'} Deine Antwort: "${item.userAnswer || '(keine Antwort)'}"
+        </div>
+        ${!item.isCorrect ? `<div class="correct-answer">✓ Richtige Antwort: "${item.correctAnswer}"</div>` : ''}
+      </div>
+    `;
+    reviewList.appendChild(itemDiv);
+  });
+  
+  document.getElementById('backToResult').onclick = () => {
+    reviewDiv.remove();
+    resultDiv.classList.remove('hidden');
+  };
+  
+  document.getElementById('restartFromReview').onclick = () => {
+    reviewDiv.remove();
+    startQuiz();
+  };
 }
 
 function konfettiRegen() {
@@ -184,7 +316,19 @@ function konfettiRegen() {
 submitBtn.onclick = checkAntwort;
 answerInput.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
-    checkAntwort();
+    e.preventDefault();
+    if (!submitBtn.disabled) {
+      checkAntwort();
+    }
+  }
+});
+
+// Add keyboard support for continue button
+document.addEventListener('keydown', function(e) {
+  const continueBtn = document.getElementById('continue');
+  if (continueBtn && (e.key === 'Enter' || e.key === ' ')) {
+    e.preventDefault();
+    continueToNext();
   }
 });
 
