@@ -1,8 +1,6 @@
-/* Grundlegendes Body-Design mit sanftem, langsamen Farbverlauf */
+/* Grundlegendes Body-Design mit Weltraum-Hintergrund */
 body {
-  background: linear-gradient(270deg, #0f2027, #203a43, #2c5364, #0f2027);
-  background-size: 600% 600%;
-  animation: gradientBG 60s ease-in-out infinite;
+  background-color: #000;
   min-height: 100vh;
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -10,14 +8,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden; /* Verhindert Scrollbalken durch Canvas */
 }
 
-/* Langsame, sanfte Animation des Hintergrunds */
-@keyframes gradientBG {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none; /* Stellt sicher, dass die Maus mit dem Quiz interagiert */
 }
+
 
 /* Container mit dunklem, leicht transparentem Hintergrund und abgerundeten Ecken */
 .quiz-container {
@@ -30,7 +33,7 @@ body {
     0 8px 24px rgba(0, 0, 0, 0.6),
     inset 0 0 30px rgba(255, 255, 255, 0.05);
   padding: 48px 40px 40px 40px;
-  animation: fadeIn 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  animation: fadeIn 0.8s cubic-bezier(.25,.46,.45,.94); /* Smoother and faster */
 }
 
 /* Überschrift modern und klar */
@@ -103,7 +106,7 @@ h1 {
     0 0 0 6px #4fd1c5,
     0 0 20px #4fd1c5,
     0 0 40px #4fd1c5;
-  animation: correctGlow 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  animation: correctGlow 0.8s ease-out;
 }
 
 #answer.glow-wrong {
@@ -111,7 +114,7 @@ h1 {
     0 0 0 6px #ff6b6b,
     0 0 20px #ff6b6b,
     0 0 40px #ff6b6b;
-  animation: wrongGlow 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+  animation: wrongGlow 0.8s ease-out;
 }
 
 /* Buttons mit modernem Farbverlauf, Schatten und Hover-Effekt */
@@ -173,7 +176,7 @@ h1 {
   font-size: 1.5rem;
   margin-top: 40px;
   color: #a3cef1;
-  animation: fadeInUp 1s cubic-bezier(.68,-0.55,.27,1.55);
+  animation: fadeInUp 0.7s ease-out; /* Faster and smoother */
   text-shadow: 0 0 8px #4a90e2;
 }
 
@@ -221,17 +224,26 @@ h1 {
 
 @keyframes popCorrect {
   0% { transform: scale(1); opacity: 0.3; }
-  60% { transform: scale(1.3); opacity: 1; }
+  60% { transform: scale(1.1); opacity: 1; } /* More subtle pop */
   100% { transform: scale(1); opacity: 1; }
 }
 
 @keyframes shakeWrong {
   0% { transform: translateX(0); }
-  20% { transform: translateX(-14px); }
-  40% { transform: translateX(14px); }
-  60% { transform: translateX(-10px); }
-  80% { transform: translateX(10px); }
+  20% { transform: translateX(-10px); } /* Less aggressive shake */
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
   100% { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive Anpassungen */

@@ -160,24 +160,51 @@ function auswertung() {
   resultDiv.innerHTML = `<div>Du hast <b>${score}</b> von <b>${FRAGEN_ANZAHL}</b> Fragen richtig.<br><br>${feedback}<br><br><button id="restart">Nochmal spielen</button></div>`;
   resultDiv.classList.remove('hidden');
   document.getElementById('restart').onclick = startQuiz;
-  konfettiRegen();
+  starburstEffect();
 }
 
-function konfettiRegen() {
-  const farben = ['#00e6d0', '#8f00ff', '#007cf0', '#ff4c60', '#ffb300', '#00ffb0', '#fff'];
-  const konfettiAnzahl = 36;
-  for (let i = 0; i < konfettiAnzahl; i++) {
-    const konfetti = document.createElement('div');
-    konfetti.className = 'confetti';
-    konfetti.style.left = Math.random() * 98 + 'vw';
-    konfetti.style.background = farben[Math.floor(Math.random() * farben.length)];
-    konfetti.style.transform = `rotate(${Math.random()*360}deg)`;
-    konfetti.style.width = 12 + Math.random()*10 + 'px';
-    konfetti.style.height = 12 + Math.random()*10 + 'px';
-    konfetti.style.opacity = 0.7 + Math.random()*0.3;
-    konfetti.style.animationDelay = (Math.random()*0.7) + 's';
-    document.body.appendChild(konfetti);
-    setTimeout(() => konfetti.remove(), 2500);
+function starburstEffect() {
+  const anzahlPartikel = 150;
+  const container = document.body;
+  for (let i = 0; i < anzahlPartikel; i++) {
+    const partikel = document.createElement('div');
+    partikel.className = 'starburst-particle';
+    partikel.style.position = 'fixed';
+    partikel.style.left = '50%';
+    partikel.style.top = '50%';
+    const size = Math.random() * 3 + 1;
+    partikel.style.width = `${size}px`;
+    partikel.style.height = `${size}px`;
+    partikel.style.background = `rgba(255, 255, 255, ${Math.random() * 0.8 + 0.2})`;
+    partikel.style.borderRadius = '50%';
+    partikel.style.pointerEvents = 'none';
+    partikel.style.zIndex = '100';
+
+    const angle = Math.random() * 360 * (Math.PI / 180);
+    const distance = Math.random() * 300 + 50;
+
+    const x = Math.cos(angle) * distance;
+    const y = Math.sin(angle) * distance;
+
+    partikel.style.transform = 'translate(-50%, -50%) scale(0)';
+    partikel.style.opacity = 0;
+
+    container.appendChild(partikel);
+
+    setTimeout(() => {
+      partikel.style.transition = 'transform 1.2s cubic-bezier(0.1, 0.7, 0.3, 1), opacity 1.2s ease-out';
+      partikel.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
+      partikel.style.opacity = 1;
+    }, 10);
+
+    setTimeout(() => {
+      partikel.style.transform = `translate(calc(-50% + ${x * 1.2}px), calc(-50% + ${y * 1.2}px)) scale(0)`;
+      partikel.style.opacity = 0;
+    }, 800);
+
+    setTimeout(() => {
+      partikel.remove();
+    }, 1800);
   }
 }
 
@@ -188,4 +215,101 @@ answerInput.addEventListener('keydown', function(e) {
   }
 });
 
-window.onload = startQuiz;
+// ===== STARFIELD BACKGROUND =====
+const starfield = () => {
+  const canvas = document.getElementById('starfield');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let stars = [];
+  const numStars = 400; // Anzahl der Sterne
+  const mouseRadius = 120; // Interaktionsradius der Maus
+
+  let mouse = {
+    x: undefined,
+    y: undefined
+  };
+
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+
+  const init = () => {
+    stars = [];
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 1.5 + 0.5,
+        baseX: Math.random() * canvas.width,
+        baseY: Math.random() * canvas.height,
+        speedX: (Math.random() - 0.5) * 0.1, // Langsameres Schweben
+        speedY: (Math.random() - 0.5) * 0.1,
+        density: (Math.random() * 20) + 5,
+        color: `rgba(255, 255, 255, ${Math.random() * 0.6 + 0.2})` // Subtilere Helligkeit
+      });
+    }
+  };
+
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    stars.forEach(star => {
+      let dx = mouse.x - star.x;
+      let dy = mouse.y - star.y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Sterne von der Maus wegstoßen
+      if (distance < mouseRadius && mouse.x !== undefined) {
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        let force = (mouseRadius - distance) / mouseRadius;
+        let directionX = forceDirectionX * force * star.density;
+        let directionY = forceDirectionY * force * star.density;
+
+        star.x -= directionX * 0.05; // Sanftere Reaktion
+        star.y -= directionY * 0.05;
+      }
+
+      // Zurück zur Basisposition schweben
+      star.x += star.speedX + (star.baseX - star.x) * 0.002;
+      star.y += star.speedY + (star.baseY - star.y) * 0.002;
+
+      // Randbehandlung (einfaches Umkehren)
+      if (star.x < 0 || star.x > canvas.width) star.speedX *= -1;
+      if (star.y < 0 || star.y > canvas.height) star.speedY *= -1;
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+      ctx.fillStyle = star.color;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+  };
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.x;
+    mouse.y = e.y;
+  });
+
+  window.addEventListener('mouseout', () => {
+    mouse.x = undefined;
+    mouse.y = undefined;
+  });
+
+  window.addEventListener('resize', () => {
+    resize();
+    init();
+  });
+
+  resize();
+  init();
+  animate();
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  startQuiz();
+  starfield();
+});
